@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Azure Hosted Website</title>
     <style>
-        /* Modernes Minimal-Design */
         :root {
             --primary: #2F74B0;
             --secondary: #004578;
@@ -14,7 +13,8 @@
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             margin: 0;
-            min-height: 100vh;
+            height: 100vh;
+            width: 100vw;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -22,6 +22,7 @@
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             text-align: center;
+            overflow: hidden;
         }
 
         .container {
@@ -30,6 +31,8 @@
             border-radius: 1rem;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
         }
 
         h1 {
@@ -45,17 +48,13 @@
             line-height: 1.6;
         }
 
-        .counter {
-            margin-top: 2rem;
-            padding: 1rem 2rem;
-            background: rgba(255,255,255,0.1);
-            border-radius: 0.5rem;
+        .physics-rocket {
+            position: absolute;
+            font-size: 2.5rem;
             cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .counter:hover {
-            transform: scale(1.05);
+            transform-origin: center;
+            z-index: 1;
+            transition: transform 0.1s linear;
         }
     </style>
 </head>
@@ -64,22 +63,63 @@
         <h1>🚀 Hello Azure!</h1>
         <p>
             Diese Website wird serverlos auf Microsoft Azure gehostet.<br>
-            Technologie: Azure Static Web Apps mit GitHub CI/CD
+            Klicke irgendwo, um die Rakete zu steuern!
         </p>
-        
-        <!-- Einfache Interaktivität für Demo-Zwecke -->
-        <div class="counter" onclick="incrementCounter()">
-            Besucherzähler: <span id="count">0</span>
-        </div>
     </div>
 
+    <div class="physics-rocket" id="rocket">🚀</div>
+
     <script>
-        // Simplistischer Zähler (ohne Backend-Persistenz)
-        let count = 0;
-        function incrementCounter() {
-            count++;
-            document.getElementById('count').textContent = count;
+        const rocket = document.getElementById('rocket');
+        let posX, posY, targetX, targetY, rocketWidth, rocketHeight;
+        let animationFrame;
+
+        function setInitialPosition() {
+            const rect = rocket.getBoundingClientRect();
+            rocketWidth = rect.width;
+            rocketHeight = rect.height;
+            posX = window.innerWidth / 2;
+            posY = window.innerHeight / 2;
+            targetX = posX;
+            targetY = posY;
+            updateRocketPosition();
         }
+
+        function calculateRotation() {
+            const dx = targetX - posX;
+            const dy = targetY - posY;
+            return Math.atan2(dy, dx) * 180 / Math.PI + 90;
+        }
+
+        function updateRocketPosition() {
+            const dx = targetX - posX;
+            const dy = targetY - posY;
+            
+            posX += dx * 0.1;
+            posY += dy * 0.1;
+
+            const rotation = calculateRotation();
+            
+            rocket.style.transform = `
+                translate(${posX - rocketWidth/2}px, ${posY - rocketHeight/2}px)
+                rotate(${rotation}deg)
+            `;
+
+            const distance = Math.sqrt(dx*dx + dy*dy);
+            if(distance > 1) {
+                animationFrame = requestAnimationFrame(updateRocketPosition);
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+            cancelAnimationFrame(animationFrame);
+            updateRocketPosition();
+        });
+
+        window.addEventListener('resize', setInitialPosition);
+        window.addEventListener('load', setInitialPosition);
     </script>
 </body>
 </html>
