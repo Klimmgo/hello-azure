@@ -1,28 +1,33 @@
 # Azure Static Web App Demo  
 
-A minimal "Hello World" website hosted on Microsoft Azure Static Web Apps.  
+Interactive website hosted on Microsoft Azure Static Web Apps with a physics-based rocket animation.  
 
 ## Features  
-- Responsive HTML/CSS design  
-- Interactive visitor counter (client-side)  
-- Automated deployment via GitHub Actions  
-- HTTPS enabled  
+- Responsive design with CSS gradients  
+- Interactive rocket physics simulation  
+- Real-time mouse-controlled navigation  
+- Automatic HTTPS deployment  
 
 ## Prerequisites  
-- GitHub account  
-- Microsoft Azure account (Student/Free Tier)  
+1. GitHub account  
+2. Microsoft Azure account (Free/Student tier recommended)  
 
 ## Deployment  
 1. **Fork this repository**  
 2. **Connect to Azure Static Web Apps**:  
-   - Follow the [Azure deployment guide](https://learn.microsoft.com/en-us/azure/static-web-apps/get-started-portal)  
+   - Navigate to [Azure Portal](https://portal.azure.com)  
+   - Create Static Web App resource → Link your GitHub repo  
+   - Configure build settings:  
+     - App location: `/`  
+     - Output location: *leave empty*  
 3. **Access live site**:  
-   URL: `https://[your-app-name].azurestaticapps.net`  
+   `https://[your-app-name].azurestaticapps.net`  
 
-## Technologies Used  
-- HTML5  
-- CSS3 (Modern gradients/animations)  
-- JavaScript (Basic interactivity)  
+## Technologies  
+- HTML5 Canvas-free animation  
+- CSS3 Custom Properties  
+- RequestAnimationFrame API  
+- Azure Global CDN  
 
 ## License  
-MIT License - Free for educational/commercial use.  
+MIT License - Free for modification/commercial use  
