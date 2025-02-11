@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Hosted Website</title>
+    <style>
+        /* Modernes Minimal-Design */
+        :root {
+            --primary: #2F74B0;
+            --secondary: #004578;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            padding: 2rem;
+            background: rgba(0,0,0,0.15);
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0 0 1rem 0;
+            letter-spacing: -0.05em;
+        }
+
+        p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .counter {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .counter:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Hello Azure!</h1>
+        <p>
+            Diese Website wird serverlos auf Microsoft Azure gehostet.<br>
+            Technologie: Azure Static Web Apps mit GitHub CI/CD
+        </p>
+        
+        <!-- Einfache Interaktivität für Demo-Zwecke -->
+        <div class="counter" onclick="incrementCounter()">
+            Besucherzähler: <span id="count">0</span>
+        </div>
+    </div>
+
+    <script>
+        // Simplistischer Zähler (ohne Backend-Persistenz)
+        let count = 0;
+        function incrementCounter() {
+            count++;
+            document.getElementById('count').textContent = count;
+        }
+    </script>
+</body>
+</html>
