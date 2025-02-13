@@ -13,7 +13,7 @@
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             margin: 0;
-            height: 100vh;
+            height: 100vh; /* GANZE SEITE KORREKT SKALIEREN */
             width: 100vw;
             display: flex;
             flex-direction: column;
@@ -49,12 +49,11 @@
         }
 
         .physics-rocket {
-            position: absolute;
+            position: absolute; /* WICHTIG: Absolute Positionierung für korrekte Skalierung */
             font-size: 2.5rem;
             cursor: pointer;
             transform-origin: center;
             z-index: 1;
-            transition: transform 0.1s linear;
         }
     </style>
 </head>
@@ -71,18 +70,24 @@
 
     <script>
         const rocket = document.getElementById('rocket');
+
         let posX, posY, targetX, targetY, rocketWidth, rocketHeight;
-        let animationFrame;
+        let isMoving = false;
+        let currentRotation = 0;
 
         function setInitialPosition() {
             const rect = rocket.getBoundingClientRect();
             rocketWidth = rect.width;
             rocketHeight = rect.height;
+
+            // Setze die Rakete exakt in die Mitte des Browserfensters
             posX = window.innerWidth / 2;
             posY = window.innerHeight / 2;
+
             targetX = posX;
             targetY = posY;
-            updateRocketPosition();
+
+            updateRocketPosition(true); // Initiale Position setzen
         }
 
         function calculateRotation() {
@@ -91,30 +96,30 @@
             return Math.atan2(dy, dx) * 180 / Math.PI + 90;
         }
 
-        function updateRocketPosition() {
-            const dx = targetX - posX;
-            const dy = targetY - posY;
-            
-            posX += dx * 0.1;
-            posY += dy * 0.1;
+        function updateRocketPosition(force = false) {
+            if (!isMoving && !force) return;
 
-            const rotation = calculateRotation();
-            
-            rocket.style.transform = `
-                translate(${posX - rocketWidth/2}px, ${posY - rocketHeight/2}px)
-                rotate(${rotation}deg)
-            `;
+            // Bewegung zur Zielposition mit sanfterer Interpolation
+            posX += (targetX - posX) * 0.05;
+            posY += (targetY - posY) * 0.05;
 
-            const distance = Math.sqrt(dx*dx + dy*dy);
-            if(distance > 1) {
-                animationFrame = requestAnimationFrame(updateRocketPosition);
-            }
+            // Berechne kontinuierlich die neue Rotation
+            const targetRotation = calculateRotation();
+            currentRotation += (targetRotation - currentRotation) * 0.1;
+
+            // Setze die Position und Rotation
+            rocket.style.left = `${posX - rocketWidth / 2}px`;
+            rocket.style.top = `${posY - rocketHeight / 2}px`;
+            rocket.style.transform = `rotate(${currentRotation}deg)`;
+
+            requestAnimationFrame(updateRocketPosition);
         }
 
         document.addEventListener('click', (e) => {
+            isMoving = true;
             targetX = e.clientX;
             targetY = e.clientY;
-            cancelAnimationFrame(animationFrame);
+
             updateRocketPosition();
         });
 
